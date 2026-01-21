@@ -65,6 +65,17 @@ app.use('/api/chat', chatLimiter);
 // ROUTES
 // ============================================================================
 
+// Request logger
+app.use((req, res, next) => {
+    console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
+    next();
+});
+
+// Root route for health checks
+app.get('/', (req, res) => {
+    res.send('Smart Portfolio API is running 🚀');
+});
+
 // Health check
 app.get('/api/health', (req, res) => {
     res.json({ status: 'ok', timestamp: new Date().toISOString() });
