@@ -1,0 +1,11 @@
+/* Additional App-specific styles */
+
+/* Ensure smooth scrolling offset for fixed navbar */
+html {
+  scroll-padding-top: 5rem;
+}
+
+/* Section transitions */
+section {
+  transition: opacity 0.3s ease;
+}
