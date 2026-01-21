@@ -2,11 +2,12 @@
  * Chat API Routes
  * 
  * Handles chat messages with context-aware AI responses.
+ * Works with or without database connection.
  */
 
 const express = require('express');
 const router = express.Router();
-const pool = require('../config/db');
+const { isConnected, safeQuery } = require('../config/db');
 const { sendMessageWithHistory } = require('../utils/gemini');
 
 /**
@@ -34,37 +35,56 @@ router.post('/', async (req, res) => {
             return res.status(400).json({ error: 'Message cannot be empty' });
         }
 
-        // Fetch last 10 messages for context
-        const historyResult = await pool.query(
-            `SELECT message_content, sender_type FROM chats
-       WHERE session_id = $1
-       ORDER BY created_at DESC
-       LIMIT 10`,
-            [sessionId]
-        );
+        // Fetch last 10 messages for context (if DB is available)
+        let history = [];
+        if (isConnected()) {
+            try {
+                const historyResult = await safeQuery(
+                    `SELECT message_content, sender_type FROM chats
+                     WHERE session_id = $1
+                     ORDER BY created_at DESC
+                     LIMIT 10`,
+                    [sessionId]
+                );
 
-        // Convert to Gemini history format (reverse for chronological order)
-        const history = historyResult.rows.reverse().map(row => ({
-            role: row.sender_type === 'user' ? 'user' : 'model',
-            parts: [{ text: row.message_content }]
-        }));
+                // Convert to Gemini history format (reverse for chronological order)
+                history = historyResult.rows.reverse().map(row => ({
+                    role: row.sender_type === 'user' ? 'user' : 'model',
+                    parts: [{ text: row.message_content }]
+                }));
+            } catch (dbError) {
+                console.warn('Could not fetch history:', dbError.message);
+            }
+        }
 
-        // Save user message to database
-        await pool.query(
-            `INSERT INTO chats (session_id, message_content, sender_type)
-       VALUES ($1, $2, 'user')`,
-            [sessionId, trimmedMessage]
-        );
+        // Save user message to database (if available)
+        if (isConnected()) {
+            try {
+                await safeQuery(
+                    `INSERT INTO chats (session_id, message_content, sender_type)
+                     VALUES ($1, $2, 'user')`,
+                    [sessionId, trimmedMessage]
+                );
+            } catch (dbError) {
+                console.warn('Could not save user message:', dbError.message);
+            }
+        }
 
         // Get AI response with context
         const aiResponse = await sendMessageWithHistory(trimmedMessage, history);
 
-        // Save AI response to database
-        await pool.query(
-            `INSERT INTO chats (session_id, message_content, sender_type)
-       VALUES ($1, $2, 'ai')`,
-            [sessionId, aiResponse]
-        );
+        // Save AI response to database (if available)
+        if (isConnected()) {
+            try {
+                await safeQuery(
+                    `INSERT INTO chats (session_id, message_content, sender_type)
+                     VALUES ($1, $2, 'ai')`,
+                    [sessionId, aiResponse]
+                );
+            } catch (dbError) {
+                console.warn('Could not save AI response:', dbError.message);
+            }
+        }
 
         // Return response
         res.json({
@@ -88,11 +108,15 @@ router.get('/history/:sessionId', async (req, res) => {
     try {
         const { sessionId } = req.params;
 
-        const result = await pool.query(
+        if (!isConnected()) {
+            return res.json({ messages: [], note: 'Database not available' });
+        }
+
+        const result = await safeQuery(
             `SELECT id, message_content, sender_type, created_at 
-       FROM chats 
-       WHERE session_id = $1 
-       ORDER BY created_at ASC`,
+             FROM chats 
+             WHERE session_id = $1 
+             ORDER BY created_at ASC`,
             [sessionId]
         );
 
