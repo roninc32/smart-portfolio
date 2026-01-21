@@ -19,8 +19,27 @@ const PORT = process.env.PORT || 5000;
 // ============================================================================
 
 // CORS - Allow frontend to communicate
+const allowedOrigins = [
+    process.env.CLIENT_URL,
+    'http://localhost:5173',
+    'http://localhost:3000',
+];
+
 app.use(cors({
-    origin: process.env.CLIENT_URL || 'http://localhost:5173',
+    origin: function (origin, callback) {
+        // Allow requests with no origin (mobile apps, curl, etc.)
+        if (!origin) return callback(null, true);
+
+        // Check if origin is in allowed list or matches Vercel pattern
+        if (allowedOrigins.includes(origin) ||
+            origin.includes('vercel.app') ||
+            origin.includes('localhost')) {
+            return callback(null, true);
+        }
+
+        console.log('CORS blocked origin:', origin);
+        callback(new Error('Not allowed by CORS'));
+    },
     methods: ['GET', 'POST'],
     credentials: true
 }));
