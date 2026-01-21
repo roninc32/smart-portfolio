@@ -7,6 +7,9 @@ import { useState, useEffect, useRef } from 'react';
 import ChatBubble from './ChatBubble';
 import TypingIndicator from './TypingIndicator';
 
+// API URL - uses environment variable in production, proxy in development
+const API_URL = import.meta.env.VITE_API_URL || '';
+
 // Generate a unique session ID for this browser session
 const getSessionId = () => {
     let sessionId = sessionStorage.getItem('chat_session_id');
@@ -67,7 +70,7 @@ export default function ChatComponent() {
         setIsLoading(true);
 
         try {
-            const response = await fetch('/api/chat', {
+            const response = await fetch(`${API_URL}/api/chat`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
