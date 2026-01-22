@@ -19,8 +19,11 @@ if (!apiKey) {
 // Initialize Gemini
 const genAI = new GoogleGenerativeAI(apiKey || 'dummy-key');
 
-// Get the model - trying different format
-const model = genAI.getGenerativeModel({ model: 'gemini-1.0-pro' });
+// Get the model - using gemini-1.5-flash which is the current recommended model
+const model = genAI.getGenerativeModel({
+    model: 'gemini-1.5-flash',
+    systemInstruction: SYSTEM_PROMPT,
+});
 
 // Generation config
 const generationConfig = {
@@ -43,28 +46,23 @@ async function sendMessageWithHistory(message, history = []) {
             throw new Error('GEMINI_API_KEY is not configured');
         }
 
-        // Build the full prompt with system context
-        const fullPrompt = `${SYSTEM_PROMPT}
+        console.log('Making Gemini API request with model: gemini-1.5-flash');
 
-User message: ${message}
-
-Respond as the AI Digital Twin:`;
-
-        console.log('Making Gemini API request...');
-
-        // Use generateContent for a simple request
-        const result = await model.generateContent({
-            contents: [{ role: 'user', parts: [{ text: fullPrompt }] }],
+        // Start a chat session with history
+        const chat = model.startChat({
             generationConfig,
+            history: history,
         });
 
+        // Send the new message
+        const result = await chat.sendMessage(message);
         const response = result.response.text();
+
         console.log('Gemini response received successfully');
         return response;
     } catch (error) {
         console.error('Gemini API Error:', error.message);
         console.error('Error status:', error.status);
-        console.error('Error details:', error.errorDetails);
 
         // Handle specific errors
         if (error.message?.includes('API_KEY') || error.message?.includes('API key') || !apiKey) {
