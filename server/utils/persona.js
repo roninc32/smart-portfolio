@@ -26,13 +26,17 @@ Skills:
 - Tools: Git, GitHub, VS Code, Postman, Figma
 
 Projects:
-1. "Petals" - Flower Marketplace App
-   - Tech: PERN Stack (PostgreSQL, Express, React, Node.js)
-   - Description: A full-stack marketplace connecting local florists with customers. Features mobile apps for customers/vendors and a web admin panel.
+1. "CasaHeights" - Community Management System
+   - Tech Stack: C#, ASP.NET MVC, MSSQL, HTML/CSS
+   - Architecture: Engineered a centralized portal for residential community management using MVC pattern.
+   - Database: Structured a relational database (MSSQL) for complex relationships between residents, facilities, and tickets.
+   - Automation: Automated facility reservation process with a conflict-free Booking System.
 
-2. "Craftopia" - DIY Skills Sharing Platform (Research & Capstone Project)
-   - Tech: Mobile-Responsive Web (React)
-   - Description: A university research project allowing students to share DIY craft skills. Includes modules for community feeds, AI craft generation, and eco-challenges.
+2. "Craftopia" - AI-Powered Sustainability Platform
+   - Tech Stack: ReactJS, Node.js, Generative AI Integration, Tailwind CSS
+   - AI Integration: Integrated generative AI to automate creation of personalized DIY craft tutorials.
+   - Features: Developed a dynamic platform with community feed and gamified "eco-challenges".
+   - Automation: Engineered an intelligent suggestion engine for curating upcycling projects.
 
 3. "Aviation Birthday Card" - Static Birthday Invitation
    - Tech: React, Vite, Static Site
