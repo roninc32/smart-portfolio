@@ -11,15 +11,12 @@ require('dotenv').config();
 // Initialize Gemini
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
-// Model configuration
-const model = genAI.getGenerativeModel({
-    model: 'gemini-pro',
-    systemInstruction: SYSTEM_PROMPT,
-});
+// Get the model (using gemini-pro which is widely available)
+const model = genAI.getGenerativeModel({ model: 'gemini-pro' });
 
 // Generation config
 const generationConfig = {
-    temperature: 0.8,  // Slightly creative but consistent
+    temperature: 0.8,
     topK: 40,
     topP: 0.95,
     maxOutputTokens: 1024,
@@ -33,26 +30,34 @@ const generationConfig = {
  */
 async function sendMessageWithHistory(message, history = []) {
     try {
-        // Start a chat session with history
-        const chat = model.startChat({
+        // Build the full prompt with system context
+        const fullPrompt = `${SYSTEM_PROMPT}
+
+User message: ${message}
+
+Respond as the AI Digital Twin:`;
+
+        // Use generateContent for a simple request
+        const result = await model.generateContent({
+            contents: [{ role: 'user', parts: [{ text: fullPrompt }] }],
             generationConfig,
-            history: history,
         });
 
-        // Send the new message
-        const result = await chat.sendMessage(message);
         const response = result.response.text();
-
         return response;
     } catch (error) {
-        console.error('Gemini API Error:', error);
+        console.error('Gemini API Error:', error.message);
+        console.error('Full error:', JSON.stringify(error, null, 2));
 
         // Handle specific errors
-        if (error.message?.includes('API_KEY')) {
+        if (error.message?.includes('API_KEY') || error.message?.includes('API key')) {
             throw new Error('Invalid or missing Gemini API key');
         }
         if (error.message?.includes('quota')) {
             throw new Error('API quota exceeded. Please try again later.');
+        }
+        if (error.message?.includes('not found') || error.message?.includes('404')) {
+            throw new Error('Gemini model not available. Please check API key.');
         }
 
         throw new Error('Failed to get AI response. Please try again.');
