@@ -9,7 +9,7 @@ export default function Hero() {
     return (
         <section
             id="hero"
-            className="min-h-screen flex items-center justify-center relative overflow-hidden py-20 px-4"
+            className="min-h-screen flex items-start lg:items-center justify-center relative overflow-hidden py-20 px-4"
         >
             {/* Background gradient effects */}
             <div className="absolute inset-0 -z-10">

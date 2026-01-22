@@ -125,7 +125,7 @@ export default function ChatComponent() {
     };
 
     return (
-        <div className="glass-card w-full max-w-lg h-[500px] md:h-[550px] flex flex-col overflow-hidden shadow-2xl shadow-accent-primary/10">
+        <div className="glass-card w-full max-w-lg h-[450px] md:h-[550px] flex flex-col overflow-hidden shadow-2xl shadow-accent-primary/10">
             {/* Header */}
             <div className="px-4 py-3 border-b border-dark-600/50 flex items-center gap-3 flex-shrink-0">
                 <div className="relative">
