@@ -19,10 +19,45 @@ if (!apiKey) {
 // Initialize Gemini
 const genAI = new GoogleGenerativeAI(apiKey || 'dummy-key');
 
-// Get the model - using gemini-1.5-flash which is the current recommended model
+// List available models on startup
+async function listAvailableModels() {
+    console.log('Fetching available Gemini models...');
+    try {
+        const response = await fetch(
+            `https://generativelanguage.googleapis.com/v1beta/models?key=${apiKey}`
+        );
+        const data = await response.json();
+
+        if (data.error) {
+            console.error('Model list error:', data.error.message);
+            return null;
+        }
+
+        console.log('Available models:');
+        const generateModels = [];
+        data.models?.forEach(model => {
+            if (model.supportedGenerationMethods?.includes('generateContent')) {
+                console.log(`  ✓ ${model.name}`);
+                generateModels.push(model.name);
+            }
+        });
+        return generateModels;
+    } catch (error) {
+        console.error('Failed to list models:', error.message);
+        return null;
+    }
+}
+
+// Call on startup
+listAvailableModels().then(models => {
+    if (models && models.length > 0) {
+        console.log(`Using first available model: ${models[0]}`);
+    }
+});
+
+// Get the model - try with full path format
 const model = genAI.getGenerativeModel({
-    model: 'gemini-1.5-flash',
-    systemInstruction: SYSTEM_PROMPT,
+    model: 'models/gemini-1.5-flash',
 });
 
 // Generation config
@@ -46,33 +81,33 @@ async function sendMessageWithHistory(message, history = []) {
             throw new Error('GEMINI_API_KEY is not configured');
         }
 
-        console.log('Making Gemini API request with model: gemini-1.5-flash');
+        // Build prompt with system instruction inline
+        const fullPrompt = `${SYSTEM_PROMPT}
 
-        // Start a chat session with history
-        const chat = model.startChat({
-            generationConfig,
-            history: history,
-        });
+User: ${message}
 
-        // Send the new message
-        const result = await chat.sendMessage(message);
+Respond naturally as Ronin's AI twin:`;
+
+        console.log('Making Gemini API request...');
+
+        // Use generateContent directly
+        const result = await model.generateContent(fullPrompt);
         const response = result.response.text();
 
         console.log('Gemini response received successfully');
         return response;
     } catch (error) {
         console.error('Gemini API Error:', error.message);
-        console.error('Error status:', error.status);
 
         // Handle specific errors
         if (error.message?.includes('API_KEY') || error.message?.includes('API key') || !apiKey) {
-            throw new Error('Invalid or missing Gemini API key. Please check GEMINI_API_KEY in Koyeb.');
+            throw new Error('Invalid or missing Gemini API key.');
         }
         if (error.message?.includes('quota')) {
             throw new Error('API quota exceeded. Please try again later.');
         }
         if (error.message?.includes('not found') || error.message?.includes('404')) {
-            throw new Error(`Gemini model error: ${error.message}`);
+            throw new Error(`Model not available. Check Koyeb logs for available models.`);
         }
 
         throw new Error('Failed to get AI response. Please try again.');
