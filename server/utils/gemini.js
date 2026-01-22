@@ -55,9 +55,9 @@ listAvailableModels().then(models => {
     }
 });
 
-// Get the model - try with full path format
+// Get the model - using gemini-2.5-flash which is available
 const model = genAI.getGenerativeModel({
-    model: 'models/gemini-1.5-flash',
+    model: 'gemini-2.5-flash',
 });
 
 // Generation config
