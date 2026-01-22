@@ -25,13 +25,15 @@ export default function ChatComponent() {
     const [inputValue, setInputValue] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
-    const messagesEndRef = useRef(null);
+    const messagesContainerRef = useRef(null);
     const inputRef = useRef(null);
     const sessionId = useRef(getSessionId());
 
-    // Auto-scroll to bottom when new messages arrive
+    // Auto-scroll to bottom when new messages arrive (only within chat container)
     const scrollToBottom = () => {
-        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+        if (messagesContainerRef.current) {
+            messagesContainerRef.current.scrollTop = messagesContainerRef.current.scrollHeight;
+        }
     };
 
     useEffect(() => {
@@ -140,7 +142,10 @@ export default function ChatComponent() {
             </div>
 
             {/* Messages Container */}
-            <div className="flex-1 overflow-y-auto p-4 space-y-3">
+            <div
+                ref={messagesContainerRef}
+                className="flex-1 overflow-y-auto p-4 space-y-4"
+            >
                 {messages.map((msg) => (
                     <ChatBubble
                         key={msg.id}
@@ -150,8 +155,6 @@ export default function ChatComponent() {
                 ))}
 
                 {isLoading && <TypingIndicator />}
-
-                <div ref={messagesEndRef} />
             </div>
 
             {/* Input Area */}
