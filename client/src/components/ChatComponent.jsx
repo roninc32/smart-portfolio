@@ -112,7 +112,7 @@ export default function ChatComponent() {
             setMessages(prev => [...prev, errorMessage]);
         } finally {
             setIsLoading(false);
-            inputRef.current?.focus();
+            inputRef.current?.focus({ preventScroll: true });
         }
     };
 
@@ -127,7 +127,7 @@ export default function ChatComponent() {
     return (
         <div className="glass-card w-full max-w-lg h-[500px] md:h-[550px] flex flex-col overflow-hidden shadow-2xl shadow-accent-primary/10">
             {/* Header */}
-            <div className="px-4 py-3 border-b border-dark-600/50 flex items-center gap-3">
+            <div className="px-4 py-3 border-b border-dark-600/50 flex items-center gap-3 flex-shrink-0">
                 <div className="relative">
                     <div className="w-10 h-10 rounded-full bg-gradient-to-br from-accent-primary to-accent-secondary flex items-center justify-center">
                         <span className="text-lg">🤖</span>
@@ -144,7 +144,7 @@ export default function ChatComponent() {
             {/* Messages Container */}
             <div
                 ref={messagesContainerRef}
-                className="flex-1 overflow-y-auto p-4 space-y-4"
+                className="flex-1 overflow-y-auto p-4 space-y-4 overscroll-contain"
             >
                 {messages.map((msg) => (
                     <ChatBubble
