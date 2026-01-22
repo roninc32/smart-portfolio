@@ -14,6 +14,9 @@ const chatRoutes = require('./routes/chat');
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+// Trust proxy - Required for rate limiting behind Koyeb/Vercel proxy
+app.set('trust proxy', 1);
+
 // ============================================================================
 // MIDDLEWARE
 // ============================================================================
