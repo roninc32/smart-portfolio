@@ -20,16 +20,16 @@ export default function ChatBubble({ message, isUser }) {
             {/* AI Avatar */}
             {!isUser && (
                 <div className="flex-shrink-0 mr-2">
-                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-accent-primary to-accent-secondary flex items-center justify-center text-sm">
+                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-gray-200 to-gray-300 dark:from-dark-500 dark:to-dark-700 flex items-center justify-center text-sm border border-gray-300 dark:border-white/10 transition-colors">
                         🤖
                     </div>
                 </div>
             )}
 
             <div
-                className={`max-w-[75%] px-4 py-3 ${isUser
-                    ? 'bg-gradient-to-r from-accent-primary to-accent-secondary text-white rounded-2xl rounded-br-sm'
-                    : 'bg-dark-600 text-gray-100 rounded-2xl rounded-bl-sm border border-dark-500'
+                className={`max-w-[75%] px-4 py-3 transition-colors ${isUser
+                    ? 'bg-gradient-to-r from-gray-800 to-gray-600 dark:from-gray-200 dark:to-white text-white dark:text-gray-900 rounded-2xl rounded-br-sm shadow-md'
+                    : 'bg-white dark:bg-dark-600 text-gray-800 dark:text-gray-100 rounded-2xl rounded-bl-sm border border-gray-200 dark:border-dark-500 shadow-sm'
                     }`}
             >
                 {/* Message content */}
@@ -39,7 +39,7 @@ export default function ChatBubble({ message, isUser }) {
 
                 {/* Timestamp */}
                 <p
-                    className={`text-xs mt-2 ${isUser ? 'text-white/60 text-right' : 'text-gray-500'
+                    className={`text-xs mt-2 transition-colors ${isUser ? 'text-white/70 dark:text-gray-900/60 text-right' : 'text-gray-400 dark:text-gray-500'
                         }`}
                 >
                     {formatTime(message.timestamp)}
@@ -49,7 +49,7 @@ export default function ChatBubble({ message, isUser }) {
             {/* User Avatar */}
             {isUser && (
                 <div className="flex-shrink-0 ml-2">
-                    <div className="w-8 h-8 rounded-full bg-dark-600 flex items-center justify-center text-sm">
+                    <div className="w-8 h-8 rounded-full bg-gray-200 dark:bg-dark-600 flex items-center justify-center text-sm border border-gray-300 dark:border-transparent transition-colors">
                         👤
                     </div>
                 </div>

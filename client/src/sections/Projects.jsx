@@ -24,13 +24,13 @@ export default function Projects() {
     ];
 
     return (
-        <section id="projects" className="py-20 px-4 bg-dark-800/30">
+        <section id="projects" className="py-20 px-4 bg-gray-100 dark:bg-dark-800/30 transition-colors duration-300">
             <div className="max-w-6xl mx-auto">
                 <div className="text-center mb-12">
-                    <h2 className="text-3xl md:text-4xl font-bold mb-4">
+                    <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900 dark:text-white transition-colors">
                         Featured <span className="gradient-text">Projects</span>
                     </h2>
-                    <p className="text-gray-400 max-w-2xl mx-auto">
+                    <p className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto transition-colors">
                         From full-stack web apps to AI integrations—here's what I've been building!
                     </p>
                 </div>
@@ -39,18 +39,18 @@ export default function Projects() {
                     {projects.map((project) => (
                         <div
                             key={project.id}
-                            className="glass-card p-6 flex flex-col hover:border-white/30 transition-all hover:-translate-y-1"
+                            className="glass-card p-6 flex flex-col hover:border-gray-400 dark:hover:border-white/30 transition-all hover:-translate-y-1"
                         >
                             {/* Project icon */}
-                            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-dark-500 to-dark-700 border border-white/10 flex items-center justify-center mb-4">
+                            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-gray-200 to-gray-300 dark:from-dark-500 dark:to-dark-700 border border-gray-300 dark:border-white/10 flex items-center justify-center mb-4 transition-colors">
                                 <span className="text-xl">{project.emoji}</span>
                             </div>
 
-                            <h3 className="text-xl font-semibold text-gray-100 mb-2">
+                            <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-2 transition-colors">
                                 {project.title}
                             </h3>
 
-                            <p className="text-gray-400 text-sm mb-4 flex-1">
+                            <p className="text-gray-600 dark:text-gray-400 text-sm mb-4 flex-1 transition-colors">
                                 {project.description}
                             </p>
 
@@ -58,7 +58,7 @@ export default function Projects() {
                                 {project.tech.map((tech) => (
                                     <span
                                         key={tech}
-                                        className="px-2 py-1 bg-dark-600/50 rounded text-xs text-gray-300"
+                                        className="px-2 py-1 bg-gray-100 dark:bg-dark-600/50 rounded text-xs text-gray-700 dark:text-gray-300 transition-colors"
                                     >
                                         {tech}
                                     </span>
@@ -69,7 +69,7 @@ export default function Projects() {
                                 href={project.link}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="text-white hover:text-gray-300 transition-colors text-sm font-medium"
+                                className="text-gray-900 dark:text-white hover:text-gray-600 dark:hover:text-gray-300 transition-colors text-sm font-medium"
                             >
                                 View Project →
                             </a>

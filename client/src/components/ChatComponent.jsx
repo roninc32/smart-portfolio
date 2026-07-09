@@ -131,23 +131,23 @@ export default function ChatComponent() {
             {isOpen && (
                 <div className="glass-card w-[90vw] sm:w-[380px] h-[500px] mb-4 flex flex-col overflow-hidden shadow-2xl animate-slide-up origin-bottom-right">
                     {/* Header */}
-                    <div className="px-4 py-3 border-b border-dark-600/50 flex items-center justify-between flex-shrink-0">
+                    <div className="px-4 py-3 border-b border-gray-200 dark:border-dark-600/50 flex items-center justify-between flex-shrink-0 transition-colors">
                         <div className="flex items-center gap-3">
                             <div className="relative">
-                                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-dark-500 to-dark-700 flex items-center justify-center border border-white/10">
+                                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-gray-200 to-gray-300 dark:from-dark-500 dark:to-dark-700 flex items-center justify-center border border-gray-300 dark:border-white/10 transition-colors">
                                     <span className="text-lg">🤖</span>
                                 </div>
                                 {/* Online indicator */}
-                                <span className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-dark-800"></span>
+                                <span className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-white dark:border-dark-800 transition-colors"></span>
                             </div>
                             <div>
-                                <h3 className="font-semibold text-gray-100">Ronin's AI Twin</h3>
-                                <p className="text-xs text-gray-400">Ask me anything</p>
+                                <h3 className="font-semibold text-gray-900 dark:text-gray-100 transition-colors">Ronin's AI Twin</h3>
+                                <p className="text-xs text-gray-500 dark:text-gray-400 transition-colors">Ask me anything</p>
                             </div>
                         </div>
                         <button 
                             onClick={() => setIsOpen(false)}
-                            className="text-gray-400 hover:text-white p-1"
+                            className="text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white p-1 transition-colors"
                         >
                             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -172,7 +172,7 @@ export default function ChatComponent() {
                     </div>
 
                     {/* Input Area */}
-                    <div className="p-4 border-t border-dark-600/50 bg-dark-800/50">
+                    <div className="p-4 border-t border-gray-200 dark:border-dark-600/50 bg-gray-50/50 dark:bg-dark-800/50 transition-colors">
                         <div className="flex gap-2">
                             <input
                                 ref={inputRef}
@@ -203,17 +203,17 @@ export default function ChatComponent() {
             {/* Floating Toggle Button */}
             <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="w-14 h-14 rounded-full bg-gradient-to-br from-dark-500 to-dark-700 flex items-center justify-center shadow-[0_0_15px_rgba(255,255,255,0.1)] hover:scale-105 transition-transform border border-white/10 z-50"
+                className="w-14 h-14 rounded-full bg-gradient-to-br from-gray-200 to-gray-300 dark:from-dark-500 dark:to-dark-700 flex items-center justify-center shadow-lg dark:shadow-[0_0_15px_rgba(255,255,255,0.1)] hover:scale-105 transition-all border border-gray-300 dark:border-white/10 z-50"
                 aria-label="Toggle chat"
             >
                 {isOpen ? (
-                    <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <svg className="w-6 h-6 text-gray-900 dark:text-white transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                     </svg>
                 ) : (
                     <span className="text-2xl relative">
                         🤖
-                        <span className="absolute -top-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-dark-700"></span>
+                        <span className="absolute -top-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-gray-300 dark:border-dark-700 transition-colors"></span>
                     </span>
                 )}
             </button>
