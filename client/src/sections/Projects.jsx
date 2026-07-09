@@ -21,6 +21,14 @@ export default function Projects() {
             emoji: '♻️',
             link: 'https://craftopia-web.vercel.app/',
         },
+        {
+            id: 3,
+            title: "Captain Lucas's 1st Birthday ✈️",
+            description: 'An interactive, aviation-themed digital birthday invitation. Features dynamic UI elements and rich social media metadata.',
+            tech: ['React', 'Vite', 'Tailwind CSS', 'Vercel'],
+            emoji: '🎂',
+            link: 'https://lucas-birthday.vercel.app/',
+        },
     ];
 
     return (
