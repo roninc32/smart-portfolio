@@ -55,9 +55,28 @@ listAvailableModels().then(models => {
     }
 });
 
-// Get the model - using gemini-2.5-flash which is available
+// Define the sendResume tool
+const sendResumeTool = {
+    name: "sendResume",
+    description: "Sends Ronin's resume to the user's email address via an external webhook.",
+    parameters: {
+        type: "OBJECT",
+        properties: {
+            emailAddress: {
+                type: "STRING",
+                description: "The email address to send the resume to."
+            }
+        },
+        required: ["emailAddress"]
+    }
+};
+
+// Get the model
 const model = genAI.getGenerativeModel({
     model: 'gemini-2.5-flash',
+    systemInstruction: SYSTEM_PROMPT,
+    tools: [{ functionDeclarations: [sendResumeTool] }],
+    toolConfig: { functionCallingConfig: { mode: "AUTO" } }
 });
 
 // Generation config
@@ -81,21 +100,62 @@ async function sendMessageWithHistory(message, history = []) {
             throw new Error('GEMINI_API_KEY is not configured');
         }
 
-        // Build prompt with system instruction inline
-        const fullPrompt = `${SYSTEM_PROMPT}
+        // Start chat with history
+        const chat = model.startChat({
+            history: history,
+            generationConfig: generationConfig
+        });
 
-User: ${message}
+        console.log('Sending message to Gemini...');
+        let result = await chat.sendMessage(message);
 
-Respond naturally as Ronin's AI twin:`;
+        // Check if the model decided to call a function
+        const functionCalls = result.response.functionCalls();
+        if (functionCalls && functionCalls.length > 0) {
+            const call = functionCalls[0];
+            
+            if (call.name === "sendResume") {
+                const email = call.args.emailAddress;
+                console.log(`Model requested to send resume to: ${email}`);
+                
+                try {
+                    const webhookUrl = process.env.N8N_WEBHOOK_URL;
+                    if (!webhookUrl) {
+                        throw new Error("N8N_WEBHOOK_URL is not configured in .env");
+                    }
+                    
+                    // Trigger the n8n webhook
+                    const webhookResponse = await fetch(webhookUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ email: email })
+                    });
+                    
+                    const responseData = webhookResponse.ok ? 
+                        "Successfully sent the resume to " + email : 
+                        "Failed to send the resume. The webhook returned an error.";
+                        
+                    // Send the function response back to the model
+                    result = await chat.sendMessage([{
+                        functionResponse: {
+                            name: "sendResume",
+                            response: { result: responseData }
+                        }
+                    }]);
+                } catch (webhookError) {
+                    console.error("Webhook Error:", webhookError);
+                    // Tell the model it failed
+                    result = await chat.sendMessage([{
+                        functionResponse: {
+                            name: "sendResume",
+                            response: { error: webhookError.message || "Failed to trigger webhook" }
+                        }
+                    }]);
+                }
+            }
+        }
 
-        console.log('Making Gemini API request...');
-
-        // Use generateContent directly
-        const result = await model.generateContent(fullPrompt);
-        const response = result.response.text();
-
-        console.log('Gemini response received successfully');
-        return response;
+        return result.response.text();
     } catch (error) {
         console.error('Gemini API Error:', error.message);
 
