@@ -8,18 +8,18 @@ export default {
     theme: {
         extend: {
             colors: {
-                // Custom dark theme palette
+                // Custom professional black & white palette
                 dark: {
-                    900: '#0a0a0f',
-                    800: '#12121a',
-                    700: '#1a1a25',
-                    600: '#252532',
-                    500: '#32324a',
+                    900: '#000000', // Pure black background
+                    800: '#0a0a0a', // Slightly lighter for cards
+                    700: '#171717',
+                    600: '#262626',
+                    500: '#404040',
                 },
                 accent: {
-                    primary: '#6366f1',    // Indigo
-                    secondary: '#8b5cf6',  // Violet
-                    glow: '#818cf8',       // Light indigo for glow effects
+                    primary: '#ffffff',    // Pure white
+                    secondary: '#a3a3a3',  // Gray
+                    glow: '#ffffff',       // White glow
                 }
             },
             animation: {

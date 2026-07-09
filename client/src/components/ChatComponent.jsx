@@ -25,6 +25,7 @@ export default function ChatComponent() {
     const [inputValue, setInputValue] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
+    const [isOpen, setIsOpen] = useState(false);
     const messagesContainerRef = useRef(null);
     const inputRef = useRef(null);
     const sessionId = useRef(getSessionId());
@@ -112,7 +113,7 @@ export default function ChatComponent() {
             setMessages(prev => [...prev, errorMessage]);
         } finally {
             setIsLoading(false);
-            inputRef.current?.focus({ preventScroll: true });
+            // Don't force focus back - this causes scroll jumps on mobile
         }
     };
 
@@ -125,74 +126,97 @@ export default function ChatComponent() {
     };
 
     return (
-        <div className="glass-card w-full max-w-lg h-[450px] md:h-[550px] flex flex-col overflow-hidden shadow-2xl shadow-accent-primary/10">
-            {/* Header */}
-            <div className="px-4 py-3 border-b border-dark-600/50 flex items-center gap-3 flex-shrink-0">
-                <div className="relative">
-                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-accent-primary to-accent-secondary flex items-center justify-center">
-                        <span className="text-lg">🤖</span>
-                    </div>
-                    {/* Online indicator */}
-                    <span className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-dark-800"></span>
-                </div>
-                <div>
-                    <h3 className="font-semibold text-gray-100">Ronin's AI Twin</h3>
-                    <p className="text-xs text-gray-400">Always online • Ask me anything</p>
-                </div>
-            </div>
-
-            {/* Messages Container */}
-            <div
-                ref={messagesContainerRef}
-                className="flex-1 overflow-y-auto p-4 space-y-4 overscroll-contain"
-            >
-                {messages.map((msg) => (
-                    <ChatBubble
-                        key={msg.id}
-                        message={msg}
-                        isUser={msg.sender === 'user'}
-                    />
-                ))}
-
-                {isLoading && <TypingIndicator />}
-            </div>
-
-            {/* Input Area */}
-            <div className="p-4 border-t border-dark-600/50">
-                <div className="flex gap-2">
-                    <input
-                        ref={inputRef}
-                        type="text"
-                        value={inputValue}
-                        onChange={(e) => setInputValue(e.target.value)}
-                        onKeyDown={handleKeyDown}
-                        placeholder="Type a message..."
-                        disabled={isLoading}
-                        className="input-chat flex-1"
-                        maxLength={500}
-                    />
-                    <button
-                        onClick={sendMessage}
-                        disabled={isLoading || !inputValue.trim()}
-                        className="btn-primary px-4 disabled:opacity-50 disabled:cursor-not-allowed"
-                        aria-label="Send message"
-                    >
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 0 24 24"
-                            fill="currentColor"
-                            className="w-5 h-5"
+        <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end">
+            {/* Chat Window */}
+            {isOpen && (
+                <div className="glass-card w-[90vw] sm:w-[380px] h-[500px] mb-4 flex flex-col overflow-hidden shadow-2xl animate-slide-up origin-bottom-right">
+                    {/* Header */}
+                    <div className="px-4 py-3 border-b border-dark-600/50 flex items-center justify-between flex-shrink-0">
+                        <div className="flex items-center gap-3">
+                            <div className="relative">
+                                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-dark-500 to-dark-700 flex items-center justify-center border border-white/10">
+                                    <span className="text-lg">🤖</span>
+                                </div>
+                                {/* Online indicator */}
+                                <span className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-dark-800"></span>
+                            </div>
+                            <div>
+                                <h3 className="font-semibold text-gray-100">Ronin's AI Twin</h3>
+                                <p className="text-xs text-gray-400">Ask me anything</p>
+                            </div>
+                        </div>
+                        <button 
+                            onClick={() => setIsOpen(false)}
+                            className="text-gray-400 hover:text-white p-1"
                         >
-                            <path d="M3.478 2.404a.75.75 0 0 0-.926.941l2.432 7.905H13.5a.75.75 0 0 1 0 1.5H4.984l-2.432 7.905a.75.75 0 0 0 .926.94 60.519 60.519 0 0 0 18.445-8.986.75.75 0 0 0 0-1.218A60.517 60.517 0 0 0 3.478 2.404Z" />
-                        </svg>
-                    </button>
-                </div>
+                            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                    </div>
 
-                {/* Character counter */}
-                <p className="text-xs text-gray-500 mt-2 text-right">
-                    {inputValue.length}/500
-                </p>
-            </div>
+                    {/* Messages Container */}
+                    <div
+                        ref={messagesContainerRef}
+                        className="flex-1 overflow-y-auto p-4 space-y-4 overscroll-contain"
+                    >
+                        {messages.map((msg) => (
+                            <ChatBubble
+                                key={msg.id}
+                                message={msg}
+                                isUser={msg.sender === 'user'}
+                            />
+                        ))}
+
+                        {isLoading && <TypingIndicator />}
+                    </div>
+
+                    {/* Input Area */}
+                    <div className="p-4 border-t border-dark-600/50 bg-dark-800/50">
+                        <div className="flex gap-2">
+                            <input
+                                ref={inputRef}
+                                type="text"
+                                value={inputValue}
+                                onChange={(e) => setInputValue(e.target.value)}
+                                onKeyDown={handleKeyDown}
+                                placeholder="Type a message..."
+                                disabled={isLoading}
+                                className="input-chat flex-1 text-sm"
+                                maxLength={500}
+                            />
+                            <button
+                                onClick={sendMessage}
+                                disabled={isLoading || !inputValue.trim()}
+                                className="btn-primary px-3 disabled:opacity-50 disabled:cursor-not-allowed"
+                                aria-label="Send message"
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
+                                    <path d="M3.478 2.404a.75.75 0 0 0-.926.941l2.432 7.905H13.5a.75.75 0 0 1 0 1.5H4.984l-2.432 7.905a.75.75 0 0 0 .926.94 60.519 60.519 0 0 0 18.445-8.986.75.75 0 0 0 0-1.218A60.517 60.517 0 0 0 3.478 2.404Z" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Floating Toggle Button */}
+            <button
+                onClick={() => setIsOpen(!isOpen)}
+                className="w-14 h-14 rounded-full bg-gradient-to-br from-dark-500 to-dark-700 flex items-center justify-center shadow-[0_0_15px_rgba(255,255,255,0.1)] hover:scale-105 transition-transform border border-white/10 z-50"
+                aria-label="Toggle chat"
+            >
+                {isOpen ? (
+                    <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                ) : (
+                    <span className="text-2xl relative">
+                        🤖
+                        <span className="absolute -top-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-dark-700"></span>
+                    </span>
+                )}
+            </button>
         </div>
     );
 }

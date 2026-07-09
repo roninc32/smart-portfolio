@@ -3,7 +3,7 @@
 /* Custom base styles */
 @layer base {
   body {
-    background-color: #0a0a0f;
+    background-color: #000000;
     color: #f3f4f6;
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
     -webkit-font-smoothing: antialiased;
@@ -21,16 +21,16 @@
   }
 
   ::-webkit-scrollbar-track {
-    background-color: #12121a;
+    background-color: #0a0a0a;
   }
 
   ::-webkit-scrollbar-thumb {
-    background-color: #32324a;
+    background-color: #404040;
     border-radius: 9999px;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background-color: #6366f1;
+    background-color: #a3a3a3;
   }
 }
 
@@ -101,29 +101,31 @@
 
 /* Component styles */
 .glass-card {
-  background-color: rgba(18, 18, 26, 0.6);
+  background-color: rgba(10, 10, 10, 0.6);
   backdrop-filter: blur(16px);
-  border: 1px solid rgba(37, 37, 50, 0.5);
+  border: 1px solid rgba(64, 64, 64, 0.5);
   border-radius: 1rem;
 }
 
 .btn-primary {
-  background: linear-gradient(to right, #6366f1, #8b5cf6);
+  background: linear-gradient(to right, #404040, #171717);
   color: white;
   font-weight: 500;
   padding: 0.625rem 1.5rem;
   border-radius: 0.75rem;
-  transition: opacity 0.2s;
-  box-shadow: 0 10px 15px -3px rgba(99, 102, 241, 0.2);
+  transition: all 0.2s;
+  box-shadow: 0 10px 15px -3px rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .btn-primary:hover {
   opacity: 0.9;
+  border-color: rgba(255, 255, 255, 0.3);
 }
 
 .input-chat {
-  background-color: #1a1a25;
-  border: 1px solid #252532;
+  background-color: #0a0a0a;
+  border: 1px solid #262626;
   border-radius: 0.75rem;
   padding: 0.75rem 1rem;
   color: #f3f4f6;
@@ -136,12 +138,12 @@
 
 .input-chat:focus {
   outline: none;
-  border-color: rgba(99, 102, 241, 0.5);
-  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+  border-color: rgba(255, 255, 255, 0.5);
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1);
 }
 
 .gradient-text {
-  background: linear-gradient(to right, #6366f1, #8b5cf6, #6366f1);
+  background: linear-gradient(to right, #ffffff, #a3a3a3, #ffffff);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -149,12 +151,12 @@
 
 /* Dark theme colors (CSS custom properties) */
 :root {
-  --dark-900: #0a0a0f;
-  --dark-800: #12121a;
-  --dark-700: #1a1a25;
-  --dark-600: #252532;
-  --dark-500: #32324a;
-  --accent-primary: #6366f1;
-  --accent-secondary: #8b5cf6;
-  --accent-glow: #818cf8;
+  --dark-900: #000000;
+  --dark-800: #0a0a0a;
+  --dark-700: #171717;
+  --dark-600: #262626;
+  --dark-500: #404040;
+  --accent-primary: #ffffff;
+  --accent-secondary: #a3a3a3;
+  --accent-glow: #ffffff;
 }

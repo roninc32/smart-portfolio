@@ -8,6 +8,7 @@ import Hero from './sections/Hero';
 import About from './sections/About';
 import Projects from './sections/Projects';
 import Contact from './sections/Contact';
+import ChatComponent from './components/ChatComponent';
 import './App.css';
 
 export default function App() {
@@ -90,10 +91,13 @@ export default function App() {
       <footer className="py-8 px-4 border-t border-dark-700/50">
         <div className="max-w-7xl mx-auto text-center">
           <p className="text-gray-500 text-sm">
-            © {new Date().getFullYear()} • Built with React & 💜 • Powered by AI
+            © {new Date().getFullYear()} • Built with React & 🤍 • Powered by AI
           </p>
         </div>
       </footer>
+
+      {/* Global Chat Widget */}
+      <ChatComponent />
     </div>
   );
 }

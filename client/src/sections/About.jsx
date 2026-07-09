@@ -5,10 +5,10 @@
 
 export default function About() {
     const skills = [
-        { category: 'Languages', items: ['JavaScript', 'TypeScript', 'SQL', 'Python'] },
-        { category: 'Frontend', items: ['React.js', 'React Native', 'Tailwind CSS', 'HTML5/CSS3'] },
-        { category: 'Backend', items: ['Node.js', 'Express.js', 'REST APIs', 'PostgreSQL', 'MongoDB'] },
-        { category: 'Tools', items: ['Git/GitHub', 'VS Code', 'Postman', 'Figma'] },
+        { category: 'Languages & Tools', items: ['C#', '.NET', 'React Native', 'React', 'Node.js', 'Express', 'NestJS'] },
+        { category: 'Databases', items: ['PostgreSQL', 'MSSQL', 'SQLite'] },
+        { category: 'AI & Automation', items: ['RAG', 'n8n', 'Power Automate', 'OpenClaw', 'Claude', 'Gemini'] },
+        { category: 'Core Concepts', items: ['Full-Stack Dev', 'Autonomous Agents', 'Rapid Prototyping', 'API Integrations'] },
     ];
 
     return (
@@ -19,8 +19,10 @@ export default function About() {
                         About <span className="gradient-text">Me</span>
                     </h2>
                     <p className="text-gray-400 max-w-2xl mx-auto">
-                        I'm a passionate developer who loves building full-stack web applications and mobile experiences.
-                        When I'm not coding, I'm probably ranking up in Dota 2 or watching One Piece! 🏴‍☠️
+                        I'm an IT graduate focused on turning ideas into working prototypes quickly. 
+                        My professional journey includes internships at GoTeam as an AI Automation Engineer, 
+                        where I integrated AI agents and built automated workflows, and Alliance Software Inc., 
+                        where I designed backend services and database structures.
                     </p>
                 </div>
 
@@ -28,15 +30,15 @@ export default function About() {
                     {skills.map((skillGroup) => (
                         <div
                             key={skillGroup.category}
-                            className="glass-card p-6 hover:border-accent-primary/30 transition-colors"
+                            className="glass-card p-6 hover:border-white/30 transition-colors"
                         >
-                            <h3 className="text-accent-primary font-semibold mb-4">
+                            <h3 className="text-white font-semibold mb-4">
                                 {skillGroup.category}
                             </h3>
                             <ul className="space-y-2">
                                 {skillGroup.items.map((skill) => (
                                     <li key={skill} className="text-gray-300 text-sm flex items-center gap-2">
-                                        <span className="w-1.5 h-1.5 bg-accent-secondary rounded-full"></span>
+                                        <span className="w-1.5 h-1.5 bg-gray-400 rounded-full"></span>
                                         {skill}
                                     </li>
                                 ))}

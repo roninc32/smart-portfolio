@@ -28,8 +28,8 @@ export default function ChatBubble({ message, isUser }) {
 
             <div
                 className={`max-w-[75%] px-4 py-3 ${isUser
-                        ? 'bg-gradient-to-r from-accent-primary to-accent-secondary text-white rounded-2xl rounded-br-sm'
-                        : 'bg-dark-700/80 text-gray-100 rounded-2xl rounded-bl-sm border border-dark-600/50'
+                    ? 'bg-gradient-to-r from-accent-primary to-accent-secondary text-white rounded-2xl rounded-br-sm'
+                    : 'bg-dark-600 text-gray-100 rounded-2xl rounded-bl-sm border border-dark-500'
                     }`}
             >
                 {/* Message content */}
