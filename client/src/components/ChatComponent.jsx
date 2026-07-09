@@ -24,7 +24,6 @@ export default function ChatComponent() {
     const [messages, setMessages] = useState([]);
     const [inputValue, setInputValue] = useState('');
     const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState(null);
     const [isOpen, setIsOpen] = useState(false);
     const messagesContainerRef = useRef(null);
     const inputRef = useRef(null);
@@ -60,7 +59,7 @@ export default function ChatComponent() {
 
         // Clear input immediately
         setInputValue('');
-        setError(null);
+        setInputValue('');
 
         // Add user message to chat
         const userMessage = {
@@ -101,7 +100,6 @@ export default function ChatComponent() {
 
         } catch (err) {
             console.error('Chat error:', err);
-            setError(err.message);
 
             // Add error message to chat
             const errorMessage = {
