@@ -115,8 +115,9 @@ export default function App() {
               </svg>
             </button>
           </div>
+        </div>
 
-          {/* Mobile Navigation */}
+        {/* Mobile Navigation */}
           {mobileMenuOpen && (
             <div className="md:hidden py-4 border-t border-gray-200 dark:border-dark-700/50">
               {navLinks.map((link) => (
